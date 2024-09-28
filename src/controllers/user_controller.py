@@ -4,6 +4,7 @@ from models.user import User, UserSchema
 from flask_jwt_extended import jwt_required
 from utils import auth_as_admin_decorator
 
+
 user_blueprint = Blueprint('user', __name__, url_prefix='/users')
 
 @user_blueprint.route('/', methods=['GET'])
