@@ -9,6 +9,6 @@ class Condition(db.Model):
     # Relationships
     user_cards = db.relationship('UserCard', back_populates='condition')
 
-class RaritySchema(ma.Schema):
+class ConditionSchema(ma.Schema):
     class Meta:
-        fields = ("id", "name")
+        fields = ("id", "condition_name")

@@ -24,7 +24,11 @@ class Trade(db.Model):
         return f'<Trading {self.id}>'
 
 class TradingSchema(ma.Schema):
-    cards = fields.List(fields.Nested('UserSchema'))
+    offering_user = fields.Nested('UserSchema', exclude=["trades_offered"])
+    receiving_user = fields.Nested('UserSchema', exclude=["trades_received"])
+    offering_card = fields.Nested('CardSchema')
+    receiving_card = fields.Nested('CardSchema')
+    status = fields.Nested('CardStatusSchema')
 
-    class Meta:
-        fields = ("id", "user_id", "status", "cards")
+class Meta:
+        fields = ("id", "offering_user", "receiving_user", "offering_card", "receiving_card", "offering_quantity", "receiving_quantity", "status")

@@ -7,12 +7,11 @@ class Status(db.Model):
     status_name = db.Column(db.String(50), unique=True, nullable=False)
 
     # Relationships
-    trades = db.relationship('Trade', back_populates='status', lazy=True)
+    trades = db.relationship('Trade', back_populates='status')
 
     def __repr__(self):
-        return f'<CardStatus {self.status}>'
-
+        return f'<CardStatus {self.status_name}>'
 
 class CardStatusSchema(ma.Schema):
     class Meta:
-        fields = ("id", "status")
+        fields = ("id", "status_name")

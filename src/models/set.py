@@ -14,11 +14,10 @@ class Set(db.Model):
     cards = db.relationship("Card", back_populates="set")
 
     def __repr__(self):
-        return f'<Set {self.name}>'
-
+        return f'<Set {self.set_name}>'
 
 class SetSchema(ma.Schema):
     cards = fields.List(fields.Nested('CardSchema'))
 
     class Meta:
-        fields = ("id", "name", "release_date", "cards")
+        fields = ("id", "set_name", "release_date", "cards")

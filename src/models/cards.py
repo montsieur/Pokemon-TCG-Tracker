@@ -23,7 +23,7 @@ class Card(db.Model):
 
 class CardSchema(ma.Schema):
     rarity = fields.Nested('RaritySchema')
-    status = fields.Nested('CardStatusSchema')
+    set = fields.Nested('SetSchema')
 
     class Meta:
         fields = ("id", "name", "rarity", "status")

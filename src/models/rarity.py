@@ -10,9 +10,8 @@ class Rarity(db.Model):
     cards = db.relationship("Card", back_populates="rarity")
 
     def __repr__(self):
-        return f'<Rarity {self.name}>'
-
+        return f'<Rarity {self.rarity_name}>'
 
 class RaritySchema(ma.Schema):
     class Meta:
-        fields = ("id", "name")
+        fields = ("id", "rarity_name")
