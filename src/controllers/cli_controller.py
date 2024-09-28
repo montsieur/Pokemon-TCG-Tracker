@@ -8,23 +8,24 @@ from models.card import Card
 from models.set import Set
 from models.condition import Condition
 from models.rarity import Rarity
-from models.trading import Trade
 from models.wishlist import Wishlist
-from models.status import Status
 
 cli_bp = Blueprint('db', __name__)
 
+# Command to create all tables in database
 @cli_bp.cli.command('create_db')
 def create_db():
     db.drop_all()
     db.create_all()
     print('Tables created successfully.')
 
+# Command to drop all tables in database
 @cli_bp.cli.command('drop_db')
 def drop_db():
     db.drop_all()
     print('Tables dropped successfully.')
 
+# Seed the database with initial/sample data
 @cli_bp.cli.command('seed_db')
 def seed_db():
     try:
@@ -52,7 +53,8 @@ def seed_db():
             Rarity(rarity_name='Common'),
             Rarity(rarity_name='Uncommon'),
             Rarity(rarity_name='Rare'),
-            Rarity(rarity_name='Holographic Rare')
+            Rarity(rarity_name='Holographic Rare'),
+
         ]
         db.session.query(Rarity).delete()
         db.session.add_all(rarities)
@@ -102,7 +104,7 @@ def seed_db():
             User(
                 username='BrockRock',
                 email='brock@pewter.com',
-                password_hash=bcrypt.generate_password_hash('onix').decode('utf-8')
+                password_hash=bcrypt.generate_password_hash('geodude').decode('utf-8')
             )
         ]
         db.session.query(User).delete()
@@ -125,10 +127,71 @@ def seed_db():
 
         print('Tables seeded successfully.')
 
-    except (IntegrityError, OperationalError, DatabaseError) as e:
+    except Exception as e:
         db.session.rollback()
         print(f"Error seeding the database: {e}")
 
+# Command to add a new set
+@cli_bp.cli.command('add_set')
+@click.argument("name")
+@click.argument("release_date")
+def add_set(name, release_date):
+    try:
+        release_date_obj = date.fromisoformat(release_date)
+
+        new_set = Set(name=name, release_date=release_date_obj)
+        db.session.add(new_set)
+        db.session.commit()
+
+        print(f"Set '{name}' added successfully with release date {release_date}.")
+
+    except ValueError:
+        print("Invalid date format. Please use YYYY-MM-DD.")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error adding set: {e}")
+
+# Command to add a new card
+@cli_bp.cli.command('add_card')
+@click.argument("name")
+@click.argument("card_type")
+@click.argument("rarity_id", type=int)
+@click.argument("set_id", type=int)
+def add_card(name, card_type, rarity_id, set_id):
+    try:
+        rarity = Rarity.query.get(rarity_id)
+        card_set = Set.query.get(set_id)
+
+        if not rarity or not card_set:
+            print("Rarity ID or Set ID not found.")
+            return
+
+        new_card = Card(name=name, type=card_type, rarityID=rarity_id, setID=set_id)
+        db.session.add(new_card)
+        db.session.commit()
+
+        print(f"Card '{name}' added successfully.")
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error adding card: {e}")
+
+# Command to add a new rarity
+@cli_bp.cli.command('add_rarity')
+@click.argument("rarity_name")
+def add_rarity(rarity_name):
+    try:
+        new_rarity = Rarity(rarity_name=rarity_name)
+        db.session.add(new_rarity)
+        db.session.commit()
+
+        print(f"Rarity '{rarity_name}' added successfully.")
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error adding rarity: {e}")
+        
+# Command to add a new user
 @cli_bp.cli.command('create_user')
 @click.argument("username", default="user")
 @click.argument("email", default="user@localhost")
@@ -141,10 +204,11 @@ def create_user(username, email, password, admin):
     try:
         db.session.commit()
         print(f"User '{username}' created successfully.")
-    except (IntegrityError, OperationalError, DatabaseError) as e:
+    except Exception as e:
         db.session.rollback()
         print(f"Error creating user: {e}")
 
+# Command to delete a user
 @cli_bp.cli.command('delete_user')
 @click.argument("username")
 def delete_user(username):
@@ -157,7 +221,7 @@ def delete_user(username):
     try:
         db.session.commit()
         print(f"User '{username}' deleted successfully.")
-    except (IntegrityError, OperationalError, DatabaseError) as e:
+    except Exception as e:
         db.session.rollback()
         print(f"Database error: {e}")
 
