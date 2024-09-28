@@ -5,7 +5,7 @@ from init import db, ma, bcrypt, jwt
 from controllers.auth_controller import auth_blueprint
 from controllers.cli_controller import cli_blueprint
 from controllers.user_controller import user_blueprint
-from controllers.cards_controller import card_blueprint
+from controllers.card_controller import card_blueprint
 from controllers.set_controller import set_blueprint
 from controllers.trading_controller import trading_blueprint
 from controllers.wishlist_controller import wishlist_blueprint
@@ -29,17 +29,22 @@ def create_app():
     ma.init_app(app)
 
     # Register blueprints (controllers)
-    app.register_blueprint(auth_blueprint)
-    app.register_blueprint(auth_blueprint)
-    app.register_blueprint(cli_blueprint)
-    app.register_blueprint(user_blueprint)
-    app.register_blueprint(card_blueprint)
-    app.register_blueprint(set_blueprint)
-    app.register_blueprint(trading_blueprint)
-    app.register_blueprint(wishlist_blueprint)
-    app.register_blueprint(rarity_blueprint)
-    app.register_blueprint(status_blueprint)
-    app.register_blueprint(condition_blueprint)
+
+    blueprints = [
+        auth_blueprint,
+        cli_blueprint,
+        user_blueprint,
+        card_blueprint,
+        set_blueprint,
+        trading_blueprint,
+        wishlist_blueprint,
+        rarity_blueprint,
+        status_blueprint,
+        condition_blueprint
+    ]
+
+    for blueprint in blueprints:
+    app.register_blueprint(blueprint)
 
     return app
 
