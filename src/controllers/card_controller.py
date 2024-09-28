@@ -16,7 +16,9 @@ def get_all_cards():
 # Get a specific card by ID
 @card_blueprint.route('/<int:card_id>', methods=['GET'])
 def get_card(card_id):
-    card = Card.query.get_or_404(card_id)
+    card = Card.query.get(card_id)
+    if not card:
+        return {"error": f"Card with ID {card_id} does not exist"}, 404
     card_schema = CardSchema()
     return card_schema.dump(card), 200
 

@@ -16,7 +16,9 @@ def get_all_rarities():
 # Get a specific rarity by ID
 @rarity_blueprint.route('/<int:id>', methods=['GET'])
 def get_rarity(id):
-    rarity = Rarity.query.get_or_404(id)
+    rarity = Rarity.query.get(id)
+    if not rarity:
+        return {"error": f"Rarity with ID {id} does not exist"}, 404
     rarity_schema = RaritySchema()
     return rarity_schema.dump(rarity), 200
 
