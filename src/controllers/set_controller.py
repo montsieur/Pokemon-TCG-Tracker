@@ -34,7 +34,7 @@ def add_set():
     except ValueError:
         return {"error": "Invalid date format. Please use YYYY-MM-DD."}, 400
     
-    new_set = Set(name=data['name'], release_date=release_date)
+    new_set = Set(set_name=data['set_name'], release_date=release_date)
     db.session.add(new_set)
     db.session.commit()
     return {"message": "Set added successfully"}, 201
@@ -51,8 +51,8 @@ def update_set(id):
     data = request.get_json()
     
     # Update set fields if provided
-    if 'name' in data:
-        set_.name = data['name']
+    if 'set_name' in data:
+        set_.set_name = data['set_name']
     
     if 'release_date' in data:
         try:
@@ -63,7 +63,7 @@ def update_set(id):
     db.session.commit()
     set_schema = SetSchema()
     return {
-        "message": f"Set '{set_.name}' updated successfully",
+        "message": f"Set '{set_.set_name}' updated successfully",
         "set": set_schema.dump(set_)
     }, 200
 
