@@ -1,5 +1,3 @@
-# src/models/set.py
-
 from src import db, ma
 from marshmallow import fields
 
@@ -17,7 +15,16 @@ class Set(db.Model):
         return f'<Set {self.set_name}>'
 
 class SetSchema(ma.Schema):
-    cards = fields.List(fields.Nested('CardSchema'))
+    id = fields.Int()
+    name = fields.Str()
+    release_date = fields.Date()
+    cards = fields.List(fields.Nested('CardSchema', only=("id", "name")))
 
     class Meta:
         fields = ("id", "set_name", "release_date", "cards")
+
+# To handle a single Set object
+set_schema = SetSchema()
+
+# To handle a list of Set objects
+sets_schema = SetSchema(many=True)

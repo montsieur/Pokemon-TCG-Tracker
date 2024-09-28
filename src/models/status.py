@@ -1,4 +1,5 @@
 from src import db, ma
+from marshmallow import fields
 
 class Status(db.Model):
     __tablename__ = 'statuses'
@@ -13,5 +14,14 @@ class Status(db.Model):
         return f'<CardStatus {self.status_name}>'
 
 class CardStatusSchema(ma.Schema):
+    id = fields.Int()
+    status_name = fields.Str()
+
     class Meta:
         fields = ("id", "status_name")
+
+# To handle a single Status object
+status_schema = StatusSchema()
+
+# To handle a list of Status objects
+statuses_schema = StatusSchema(many=True)

@@ -1,4 +1,5 @@
 from src import db, ma
+from marshmallow import fields
 
 class Rarity(db.Model):
     __tablename__ = 'rarities'
@@ -13,5 +14,14 @@ class Rarity(db.Model):
         return f'<Rarity {self.rarity_name}>'
 
 class RaritySchema(ma.Schema):
+    id = fields.Int()
+    rarity_name = fields.Str()
+
     class Meta:
         fields = ("id", "rarity_name")
+
+# To handle a single Rarity object
+rarity_schema = RaritySchema()
+
+# To handle a list of Rarity objects
+rarities_schema = RaritySchema(many=True)
