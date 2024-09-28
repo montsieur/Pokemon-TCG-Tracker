@@ -12,7 +12,6 @@ class Card(db.Model):
 
     # Relationships
     user_cards = db.relationship('UserCard', back_populates='card')
-    wishlist_entries = db.relationship('Wishlist', back_populates='card')
     trades_offered = db.relationship('Trade', foreign_keys='Trade.offering_card_id', back_populates='offering_card')
     trades_received = db.relationship('Trade', foreign_keys='Trade.receiving_card_id', back_populates='receiving_card')
     rarity = db.relationship('Rarity', back_populates='cards')
@@ -26,11 +25,10 @@ class CardSchema(ma.Schema):
     name = fields.Str(required=True)
     card_type = fields.Str()
     rarity = fields.Nested('RaritySchema')
-    set = fields.Nested('SetSchema')
-    wishlist_entries = fields.List(fields.Nested('WishlistSchema', exclude=["card"]))
+    set = fields.Nested('SetSchema', only=("id", "set_name", "release_date"))
 
     class Meta:
-        fields = ("id", "name", "card_type", "rarity", "wishlist_entries")
+        fields = ("id", "name", "card_type", "rarity", "set")
 
 # To handle a single Card object
 card_schema = CardSchema()

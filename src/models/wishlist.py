@@ -10,7 +10,7 @@ class Wishlist(db.Model):
 
     # Relationships
     user = db.relationship('User', back_populates='wishlists')
-    card = db.relationship('Card', back_populates='wishlist_entries')
+    card = db.relationship('Card')
 
     def __repr__(self):
         return f'<Wishlist id={self.id}>'
@@ -18,7 +18,7 @@ class Wishlist(db.Model):
 
 class WishlistSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=["wishlists"])
-    card = fields.Nested('CardSchema', exclude=["wishlist_entries"])
+    card = fields.Nested('CardSchema', only=("id", "name", "card_type"))
 
     class Meta:
         fields = ("id", "user_id", "card_id", "user", "card")
