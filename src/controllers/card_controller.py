@@ -29,8 +29,8 @@ def add_card():
     new_card = Card(
         name=data['name'],
         type=data['type'],
-        rarityID=data['rarityID'],
-        setID=data['setID']
+        rarity_id=data['rarity_id'],
+        set_id=data['set_id']
     )
     db.session.add(new_card)
     db.session.commit()
@@ -47,8 +47,8 @@ def update_card(card_id):
     # Update card fields if provided
     card.name = data.get('name', card.name)
     card.type = data.get('type', card.type)
-    card.rarityID = data.get('rarityID', card.rarityID)
-    card.setID = data.get('setID', card.setID)
+    card.rarity_id = data.get('rarity_id', card.rarity_id)
+    card.set_id = data.get('set_id', card.set_id)
 
     db.session.commit()
     card_schema = CardSchema()
