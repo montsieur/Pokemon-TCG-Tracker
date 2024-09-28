@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from datetime import timedelta
 from init import db, bcrypt
 from models.user import User
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
@@ -44,7 +45,7 @@ def login():
 
         # Check if user exists and password is correct
         if user and user.check_password(password):
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user.id, expires_delta=timedelta(days=1))
             return {"access_token": access_token}, 200
         else:
             return {"message": "Invalid email or password."}, 401

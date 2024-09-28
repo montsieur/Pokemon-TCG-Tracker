@@ -30,7 +30,7 @@ def add_card():
     data = request.get_json()
     new_card = Card(
         name=data['name'],
-        type=data['type'],
+        card_type=data['card_type'],
         rarity_id=data['rarity_id'],
         set_id=data['set_id']
     )
@@ -48,7 +48,7 @@ def update_card(card_id):
 
     # Update card fields if provided
     card.name = data.get('name', card.name)
-    card.type = data.get('type', card.type)
+    card.card_type = data.get('type', card.card_type)
     card.rarity_id = data.get('rarity_id', card.rarity_id)
     card.set_id = data.get('set_id', card.set_id)
 
