@@ -25,7 +25,7 @@ class CardSchema(ma.Schema):
     name = fields.Str(required=True)
     card_type = fields.Str()
     rarity = fields.Nested('RaritySchema')
-    set = fields.Nested('SetSchema', only=("id", "set_name", "release_date"))
+    set = fields.Nested('SetSchema', only=("set_name", "release_date"))
 
     class Meta:
         fields = ("id", "name", "card_type", "rarity", "set")
