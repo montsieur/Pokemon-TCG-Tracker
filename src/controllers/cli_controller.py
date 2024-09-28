@@ -2,6 +2,7 @@ from flask import Blueprint
 from datetime import date
 import click
 from init import db, bcrypt
+from sqlalchemy.exc import IntegrityError, OperationalError, DatabaseError
 
 from models.user import User
 from models.card import Card
@@ -18,15 +19,25 @@ cli_blueprint = Blueprint('db', __name__)
 # Command to create all tables in database
 @cli_blueprint.cli.command('create_db')
 def create_db():
-    db.drop_all()
-    db.create_all()
-    print('Tables created successfully.')
+    try:
+        db.drop_all()
+        db.create_all()
+        print('Tables created successfully.')
+    except OperationalError as e:
+        print(f"Operational error occurred while creating tables: {str(e)}")
+    except DatabaseError as e:
+        print(f"Database error occurred while creating tables: {str(e)}")
 
 # Command to drop all tables in database
 @cli_blueprint.cli.command('drop_db')
 def drop_db():
-    db.drop_all()
-    print('Tables dropped successfully.')
+    try:
+        db.drop_all()
+        print('Tables dropped successfully.')
+    except OperationalError as e:
+        print(f"Operational error occurred while dropping tables: {str(e)}")
+    except DatabaseError as e:
+        print(f"Database error occurred while dropping tables: {str(e)}")
 
 # Seed the database with initial/sample data
 @cli_blueprint.cli.command('seed_db')
@@ -193,7 +204,7 @@ def add_set(name, release_date):
     try:
         release_date_obj = date.fromisoformat(release_date)
 
-        new_set = Set(name=name, release_date=release_date_obj)
+        new_set = Set(set_name=name, release_date=release_date_obj)
         db.session.add(new_set)
         db.session.commit()
 
@@ -220,15 +231,21 @@ def add_card(name, card_type, rarity_id, set_id):
             print("Rarity ID or Set ID not found.")
             return
 
-        new_card = Card(name=name, type=card_type, rarityID=rarity_id, setID=set_id)
+        new_card = Card(name=name, card_type=card_type, rarityID=rarity_id, setID=set_id)
         db.session.add(new_card)
         db.session.commit()
 
         print(f"Card '{name}' added successfully.")
 
-    except Exception as e:
+    except IntegrityError:
         db.session.rollback()
-        print(f"Error adding card: {e}")
+        print("An integrity error occurred while seeding the database. Check for unique constraints.")
+    except OperationalError as e:
+        db.session.rollback()
+        print(f"Operational error occurred while seeding the database: {str(e)}")
+    except DatabaseError as e:
+        db.session.rollback()
+        print(f"Database error occurred while seeding the database: {str(e)}")
 
 # Command to add a new rarity
 @cli_blueprint.cli.command('add_rarity')
@@ -252,15 +269,21 @@ def add_rarity(rarity_name):
 @click.argument("password", default="user")
 @click.option("--admin", is_flag=True)
 def create_user(username, email, password, admin):
-    hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    user = User(username=username, email=email, password_hash=hash_password, is_admin=admin)
-    db.session.add(user)
     try:
+        hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        user = User(username=username, email=email, password_hash=hash_password, is_admin=admin)
+        db.session.add(user)
         db.session.commit()
         print(f"User '{username}' created successfully.")
-    except Exception as e:
+    except IntegrityError:
         db.session.rollback()
-        print(f"Error creating user: {e}")
+        print(f"Error: Email or username '{email}' is already registered.")
+    except OperationalError as e:
+        db.session.rollback()
+        print(f"Operational error occurred while creating user: {str(e)}")
+    except DatabaseError as e:
+        db.session.rollback()
+        print(f"Database error occurred while creating user: {str(e)}")
 
 # Command to delete a user
 @cli_blueprint.cli.command('delete_user')
