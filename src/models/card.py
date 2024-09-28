@@ -6,9 +6,9 @@ class Card(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.String(100))
-    rarityID = db.Column(db.Integer, db.ForeignKey('rarities.id'))
-    setID = db.Column(db.Integer, db.ForeignKey('sets.id'))
+    card_type = db.Column(db.String(100))
+    rarity_id = db.Column(db.Integer, db.ForeignKey('rarities.id'))
+    set_id = db.Column(db.Integer, db.ForeignKey('sets.id'))
 
     # Relationships
     user_cards = db.relationship('UserCard', back_populates='card')
@@ -27,3 +27,9 @@ class CardSchema(ma.Schema):
 
     class Meta:
         fields = ("id", "name", "rarity", "status")
+
+# To handle a single Card object
+card_schema = CardSchema()
+
+# To handle a list of Card objects
+cards_schema = CardSchema(many=True)
