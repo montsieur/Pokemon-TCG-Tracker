@@ -10,6 +10,8 @@ from models.condition import Condition
 from models.rarity import Rarity
 from models.wishlist import Wishlist
 from models.user_card import UserCard
+from models.status import Status
+from models.trading import Trade
 
 cli_blueprint = Blueprint('db', __name__)
 
@@ -140,6 +142,44 @@ def seed_db():
         db.session.commit()
 
         print('Tables seeded successfully.')
+
+        # Seed Statuses
+        statuses = [
+            Status(status_name='Pending'),
+            Status(status_name='Accepted'),
+            Status(status_name='Declined'),
+            Status(status_name='Cancelled')
+        ]
+        db.session.query(Status).delete()
+        db.session.add_all(statuses)
+        db.session.commit()
+
+        print('Statuses seeded successfully.')
+
+        # Seed Trades
+        trades = [
+            Trade(
+                offering_user_id=users[0].id,
+                receiving_user_id=users[1].id,
+                offering_card_id=cards[0].id,
+                receiving_card_id=cards[1].id,
+                offering_quantity=1,
+                receiving_quantity=1,
+                status_id=statuses[0].id  # Pending
+            ),
+            Trade(
+                offering_user_id=users[1].id,
+                receiving_user_id=users[0].id,
+                offering_card_id=cards[1].id,
+                receiving_card_id=cards[0].id,
+                offering_quantity=2,
+                receiving_quantity=1,
+                status_id=statuses[1].id  # Accepted
+            )
+        ]
+        db.session.query(Trade).delete()
+        db.session.add_all(trades)
+        db.session.commit()
 
     except Exception as e:
         db.session.rollback()

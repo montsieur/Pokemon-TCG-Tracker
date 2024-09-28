@@ -17,7 +17,7 @@ class Wishlist(db.Model):
 
 
 class WishlistSchema(ma.Schema):
-    user = fields.Nested('UserSchema', exclude=["wishlists"])
+    user = fields.Nested('UserSchema', exclude=["trades_offered", "trades_received"])
     card = fields.Nested('CardSchema', only=("id", "name", "card_type"))
 
     class Meta:

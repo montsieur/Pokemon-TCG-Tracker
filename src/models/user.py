@@ -33,10 +33,10 @@ class UserSchema(ma.Schema):
     username = fields.Str(required=True)
     email = fields.String(required=True, validate=Regexp(r"^\S+@\S+\.\S+$", error="Invalid Email Format."))
     is_admin = fields.Bool()
-    cards = fields.List(fields.Nested('UserCardSchema', exclude=["user"]))
-    trades_offered = fields.List(fields.Nested('TradingSchema', exclude=["offering_user"]))
-    trades_received = fields.List(fields.Nested('TradingSchema', exclude=["receiving_user"]))
-    wishlists = fields.List(fields.Nested('WishlistSchema', exclude=["user"]))
+    user_cards = fields.List(fields.Nested('UserCardSchema', only=("id", "card_id", "condition_id")))
+    trades_offered = fields.List(fields.Nested('TradingSchema', only=("id", "receiving_user_id", "status")))
+    trades_received = fields.List(fields.Nested('TradingSchema', only=("id", "offering_user_id", "status")))
+    wishlists = fields.List(fields.Nested('WishlistSchema', only=("id", "card_id")))
 
     @validates('username')
     def validate_name(self, name):
@@ -46,7 +46,13 @@ class UserSchema(ma.Schema):
             raise ValidationError("Username must be at least 2 characters long.")
 
     class Meta:
-        fields = ("id", "username", "email", "is_admin", "cards", "trades_offered", "trades_received", "wishlists")
+        fields = ("id", "username", "email", "is_admin", "user_cards", "trades_offered", "trades_received", "wishlists")
+
+# To handle a single user object
+user_schema = UserSchema()
+
+# To handle a list of user objects
+users_schema = UserSchema(many=True)
 
 
 # To handle a single user object

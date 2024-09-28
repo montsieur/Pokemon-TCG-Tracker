@@ -36,13 +36,13 @@ def create_trade():
     offering_user_id = get_jwt_identity()
 
     # Validate the receiving user
-    receiving_user = User.query.get(data['receiving_userID'])
+    receiving_user = User.query.get(data['receiving_user_id'])
     if not receiving_user:
         return {"error": "Receiving user does not exist"}, 404
 
     # Validate the cards involved in the trade
-    offering_card = Card.query.get(data['offering_cardID'])
-    receiving_card = Card.query.get(data['receiving_cardID'])
+    offering_card = Card.query.get(data['offering_card_id'])
+    receiving_card = Card.query.get(data['receiving_card_id'])
     if not offering_card or not receiving_card:
         return {"error": "One or both cards involved in the trade do not exist"}, 404
 
@@ -58,7 +58,7 @@ def create_trade():
         receiving_card_id=data['receiving_card_id'],
         offering_quantity=data['offering_quantity'],
         receiving_quantity=data['receiving_quantity'],
-        statusID=data['statusID']
+        status_id=data['status_id']
     )
     db.session.add(new_trade)
     db.session.commit()
@@ -75,13 +75,13 @@ def update_trade_status(trade_id):
         return {"error": f"Trade with ID {trade_id} does not exist"}, 404
 
     # Only involved users or admin can update the trade status
-    if user_id != trade.offering_userID and user_id != trade.receiving_userID:
+    if user_id != trade.offering_user_id and user_id != trade.receiving_user_id:
         current_user = User.query.get(user_id)
         if not current_user or not current_user.is_admin:
             return {"error": "You do not have permission to update this trade"}, 403
 
     data = request.get_json()
-    trade.statusID = data['statusID']
+    trade.status_id = data['status_id']
     db.session.commit()
     return {"message": "Trade status updated successfully"}, 200
 
