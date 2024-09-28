@@ -1,4 +1,4 @@
-from src import db, ma
+from init import db, ma
 from marshmallow import fields
 
 class Card(db.Model):
@@ -22,11 +22,15 @@ class Card(db.Model):
         return f'<Card {self.name}>'
 
 class CardSchema(ma.Schema):
+    id = fields.Int()
+    name = fields.Str(required=True)
+    card_type = fields.Str()
     rarity = fields.Nested('RaritySchema')
     set = fields.Nested('SetSchema')
+    wishlist_entries = fields.List(fields.Nested('WishlistSchema', exclude=["card"]))
 
     class Meta:
-        fields = ("id", "name", "rarity", "status")
+        fields = ("id", "name", "card_type", "rarity", "wishlist_entries")
 
 # To handle a single Card object
 card_schema = CardSchema()

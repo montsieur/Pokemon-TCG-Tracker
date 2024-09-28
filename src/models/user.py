@@ -1,6 +1,7 @@
-from src import db, ma
+from init import db, ma
 from marshmallow import fields, validates, ValidationError
 from marshmallow.validate import Regexp
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -13,8 +14,8 @@ class User(db.Model):
 
     # Relationships
     cards = db.relationship("UserCard", back_populates="owner")
-    trades_offered = db.relationship('Trade', foreign_keys='Trade.offering_userID', back_populates='offering_user')
-    trades_received = db.relationship('Trade', foreign_keys='Trade.receiving_userID', back_populates='receiving_user')
+    trades_offered = db.relationship('Trade', foreign_keys='Trade.offering_user_id', back_populates='offering_user')
+    trades_received = db.relationship('Trade', foreign_keys='Trade.receiving_user_id', back_populates='receiving_user')
     wishlists = db.relationship("Wishlist", back_populates="user")
 
     def __repr__(self):
@@ -28,11 +29,14 @@ class User(db.Model):
     
 class UserSchema(ma.Schema):
     # Define how to serialize/deserialize user objects
+    id = fields.Int()
+    username = fields.Str(required=True)
+    email = fields.String(required=True, validate=Regexp(r"^\S+@\S+\.\S+$", error="Invalid Email Format."))
+    is_admin = fields.Bool()
     cards = fields.List(fields.Nested('UserCardSchema', exclude=["owner"]))
     trades_offered = fields.List(fields.Nested('TradingSchema', exclude=["offering_user"]))
     trades_received = fields.List(fields.Nested('TradingSchema', exclude=["receiving_user"]))
     wishlists = fields.List(fields.Nested('WishlistSchema', exclude=["user"]))
-    email = fields.String(required=True, validate=Regexp(r"^\S+@\S+\.\S+$", error="Invalid Email Format."))
 
     @validates('username')
     def validate_name(self, name):
@@ -43,7 +47,7 @@ class UserSchema(ma.Schema):
 
     class Meta:
         fields = ("id", "username", "email", "is_admin", "cards", "trades_offered", "trades_received", "wishlists")
-        exclude = ("password_hash",)
+
 
 # To handle a single user object
 user_schema = UserSchema()

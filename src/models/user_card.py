@@ -1,4 +1,4 @@
-from src import db
+from init import db, ma
 from marshmallow import fields
 
 class UserCard(db.Model):

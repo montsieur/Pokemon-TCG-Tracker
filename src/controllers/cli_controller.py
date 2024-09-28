@@ -10,37 +10,37 @@ from models.condition import Condition
 from models.rarity import Rarity
 from models.wishlist import Wishlist
 
-cli_bp = Blueprint('db', __name__)
+cli_blueprint = Blueprint('db', __name__)
 
 # Command to create all tables in database
-@cli_bp.cli.command('create_db')
+@cli_blueprint.cli.command('create_db')
 def create_db():
     db.drop_all()
     db.create_all()
     print('Tables created successfully.')
 
 # Command to drop all tables in database
-@cli_bp.cli.command('drop_db')
+@cli_blueprint.cli.command('drop_db')
 def drop_db():
     db.drop_all()
     print('Tables dropped successfully.')
 
 # Seed the database with initial/sample data
-@cli_bp.cli.command('seed_db')
+@cli_blueprint.cli.command('seed_db')
 def seed_db():
     try:
         # Seed Sets
         sets = [
             Set(
-                name='Base Set',
+                set_name='Base Set',
                 release_date=date(1999, 1, 9)
             ),
             Set(
-                name='Jungle',
+                set_name='Jungle',
                 release_date=date(1999, 6, 16)
             ),
             Set(
-                name='Fossil',
+                set_name='Fossil',
                 release_date=date(1999, 10, 10)
             )
         ]
@@ -78,12 +78,13 @@ def seed_db():
 
         # Seed Cards
         cards = [
-            Card(name='Charizard', type='Fire', rarityID=rarities[3].id, setID=sets[0].id),
-            Card(name='Pikachu', type='Electric', rarityID=rarities[0].id, setID=sets[1].id),
-            Card(name='Snorlax', type='Normal', rarityID=rarities[2].id, setID=sets[2].id),
-            Card(name='Bulbasaur', type='Grass', rarityID=rarities[0].id, setID=sets[0].id),
-            Card(name='Mewtwo', type='Psychic', rarityID=rarities[3].id, setID=sets[1].id)
+            Card(name='Charizard', card_type='Fire', rarity_id=rarities[3].id, set_id=sets[0].id),
+            Card(name='Pikachu', card_type='Electric', rarity_id=rarities[0].id, set_id=sets[1].id),
+            Card(name='Snorlax', card_type='Normal', rarity_id=rarities[2].id, set_id=sets[2].id),
+            Card(name='Bulbasaur', card_type='Grass', rarity_id=rarities[0].id, set_id=sets[0].id),
+            Card(name='Mewtwo', card_type='Psychic', rarity_id=rarities[3].id, set_id=sets[1].id)
         ]
+        
         db.session.query(Card).delete()
         db.session.add_all(cards)
         db.session.commit()
@@ -132,7 +133,7 @@ def seed_db():
         print(f"Error seeding the database: {e}")
 
 # Command to add a new set
-@cli_bp.cli.command('add_set')
+@cli_blueprint.cli.command('add_set')
 @click.argument("name")
 @click.argument("release_date")
 def add_set(name, release_date):
@@ -152,7 +153,7 @@ def add_set(name, release_date):
         print(f"Error adding set: {e}")
 
 # Command to add a new card
-@cli_bp.cli.command('add_card')
+@cli_blueprint.cli.command('add_card')
 @click.argument("name")
 @click.argument("card_type")
 @click.argument("rarity_id", type=int)
@@ -177,7 +178,7 @@ def add_card(name, card_type, rarity_id, set_id):
         print(f"Error adding card: {e}")
 
 # Command to add a new rarity
-@cli_bp.cli.command('add_rarity')
+@cli_blueprint.cli.command('add_rarity')
 @click.argument("rarity_name")
 def add_rarity(rarity_name):
     try:
@@ -192,7 +193,7 @@ def add_rarity(rarity_name):
         print(f"Error adding rarity: {e}")
         
 # Command to add a new user
-@cli_bp.cli.command('create_user')
+@cli_blueprint.cli.command('create_user')
 @click.argument("username", default="user")
 @click.argument("email", default="user@localhost")
 @click.argument("password", default="user")
@@ -209,7 +210,7 @@ def create_user(username, email, password, admin):
         print(f"Error creating user: {e}")
 
 # Command to delete a user
-@cli_bp.cli.command('delete_user')
+@cli_blueprint.cli.command('delete_user')
 @click.argument("username")
 def delete_user(username):
     user = User.query.filter_by(username=username).first()

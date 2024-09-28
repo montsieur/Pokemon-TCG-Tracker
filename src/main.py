@@ -12,13 +12,14 @@ from controllers.wishlist_controller import wishlist_blueprint
 from controllers.rarity_controller import rarity_blueprint
 from controllers.status_controller import status_blueprint
 from controllers.condition_controller import condition_blueprint
+from controllers.user_card_controller import user_card_blueprint
 
 def create_app():
     # Create a Flask app
     app = Flask(__name__)
 
     # Configure the app (Database URL, JWT Secret, etc.)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://your_user:your_password@localhost/tcg_tracker')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://your_user:your_password@localhost/pokemontcg_tracker')
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY', 'your_secret_key')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -40,11 +41,12 @@ def create_app():
         wishlist_blueprint,
         rarity_blueprint,
         status_blueprint,
-        condition_blueprint
+        condition_blueprint,
+        user_card_blueprint
     ]
 
     for blueprint in blueprints:
-    app.register_blueprint(blueprint)
+        app.register_blueprint(blueprint)
 
     return app
 

@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from init import db
-from models.status import Status, CardStatusSchema
+from models.status import Status, StatusSchema
 from flask_jwt_extended import jwt_required
 from utils import auth_as_admin_decorator
 
@@ -10,7 +10,7 @@ status_blueprint = Blueprint('status', __name__, url_prefix='/statuses')
 @status_blueprint.route('/', methods=['GET'])
 def get_all_statuses():
     statuses = Status.query.all()
-    status_schema = CardStatusSchema(many=True)
+    status_schema = StatusSchema(many=True)
     return status_schema.dump(statuses), 200
 
 # Get a specific status by ID
@@ -20,7 +20,7 @@ def get_status(id):
     if not status:
         return {"error": f"Status with ID {id} does not exist"}, 404
 
-    status_schema = CardStatusSchema()
+    status_schema = StatusSchema()
     return status_schema.dump(status), 200
 
 # Add a new status (Admin access required)

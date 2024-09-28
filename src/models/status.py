@@ -1,4 +1,4 @@
-from src import db, ma
+from init import db, ma
 from marshmallow import fields
 
 class Status(db.Model):
@@ -13,7 +13,7 @@ class Status(db.Model):
     def __repr__(self):
         return f'<CardStatus {self.status_name}>'
 
-class CardStatusSchema(ma.Schema):
+class StatusSchema(ma.Schema):
     id = fields.Int()
     status_name = fields.Str()
 

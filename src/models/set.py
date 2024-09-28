@@ -1,11 +1,11 @@
-from src import db, ma
+from init import db, ma
 from marshmallow import fields
 
 class Set(db.Model):
     __tablename__ = 'sets'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
+    set_name = db.Column(db.String(120), nullable=False)
     release_date = db.Column(db.Date, nullable=False)
 
     # Relationships
@@ -16,7 +16,7 @@ class Set(db.Model):
 
 class SetSchema(ma.Schema):
     id = fields.Int()
-    name = fields.Str()
+    set_name = fields.Str()
     release_date = fields.Date()
     cards = fields.List(fields.Nested('CardSchema', only=("id", "name")))
 

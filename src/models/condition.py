@@ -1,4 +1,5 @@
-from src import db, ma
+from init import db, ma
+from marshmallow import fields
 
 class Condition(db.Model):
     __tablename__ = 'conditions'

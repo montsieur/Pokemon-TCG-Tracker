@@ -52,10 +52,10 @@ def create_trade():
 
     # Create the new trade offer
     new_trade = Trade(
-        offering_userID=offering_user_id,
-        receiving_userID=data['receiving_userID'],
-        offering_cardID=data['offering_cardID'],
-        receiving_cardID=data['receiving_cardID'],
+        offering_user_id=offering_user_id,
+        receiving_user_id=data['receiving_user_id'],
+        offering_card_id=data['offering_card_id'],
+        receiving_card_id=data['receiving_card_id'],
         offering_quantity=data['offering_quantity'],
         receiving_quantity=data['receiving_quantity'],
         statusID=data['statusID']

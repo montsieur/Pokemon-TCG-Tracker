@@ -1,4 +1,4 @@
-from src import db, ma
+from init import db, ma
 from marshmallow import fields
 
 class Trade(db.Model):
@@ -34,7 +34,7 @@ class Meta:
         fields = ("id", "offering_user", "receiving_user", "offering_card", "receiving_card", "offering_quantity", "receiving_quantity", "status")
 
 # To handle a single Trade object
-trade_schema = TradeSchema()
+trade_schema = TradingSchema()
 
 # To handle a list of Trade objects
-trades_schema = TradeSchema(many=True)
+trades_schema = TradingSchema(many=True)
