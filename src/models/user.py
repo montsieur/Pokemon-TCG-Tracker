@@ -1,7 +1,6 @@
 from src import db, ma
 from marshmallow import fields, validates, ValidationError
 from marshmallow.validate import Regexp
-from flask_bcrypt import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'users'
