@@ -13,7 +13,7 @@ class User(db.Model):
     is_admin = db.Column(db.Boolean, default=False)
 
     # Relationships
-    cards = db.relationship("UserCard", back_populates="owner")
+    user_cards = db.relationship("UserCard", back_populates="user")
     trades_offered = db.relationship('Trade', foreign_keys='Trade.offering_user_id', back_populates='offering_user')
     trades_received = db.relationship('Trade', foreign_keys='Trade.receiving_user_id', back_populates='receiving_user')
     wishlists = db.relationship("Wishlist", back_populates="user")
@@ -33,7 +33,7 @@ class UserSchema(ma.Schema):
     username = fields.Str(required=True)
     email = fields.String(required=True, validate=Regexp(r"^\S+@\S+\.\S+$", error="Invalid Email Format."))
     is_admin = fields.Bool()
-    cards = fields.List(fields.Nested('UserCardSchema', exclude=["owner"]))
+    cards = fields.List(fields.Nested('UserCardSchema', exclude=["user"]))
     trades_offered = fields.List(fields.Nested('TradingSchema', exclude=["offering_user"]))
     trades_received = fields.List(fields.Nested('TradingSchema', exclude=["receiving_user"]))
     wishlists = fields.List(fields.Nested('WishlistSchema', exclude=["user"]))

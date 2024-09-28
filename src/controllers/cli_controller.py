@@ -9,6 +9,7 @@ from models.set import Set
 from models.condition import Condition
 from models.rarity import Rarity
 from models.wishlist import Wishlist
+from models.user_card import UserCard
 
 cli_blueprint = Blueprint('db', __name__)
 
@@ -124,6 +125,18 @@ def seed_db():
         ]
         db.session.query(Wishlist).delete()
         db.session.add_all(wishlists)
+        db.session.commit()
+
+        print('Tables seeded successfully.')
+
+        # Seed UserCards
+        user_cards = [
+            UserCard(user_id=users[0].id, card_id=cards[0].id, condition_id=conditions[0].id),
+            UserCard(user_id=users[1].id, card_id=cards[1].id, condition_id=conditions[1].id),
+            UserCard(user_id=users[2].id, card_id=cards[2].id, condition_id=conditions[2].id)
+        ]
+        db.session.query(UserCard).delete()
+        db.session.add_all(user_cards)
         db.session.commit()
 
         print('Tables seeded successfully.')
