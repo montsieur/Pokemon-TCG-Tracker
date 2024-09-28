@@ -21,11 +21,14 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
     
+    # Password hashing
     def set_password(self, password):
         self.password_hash = generate_password_hash(password).decode('utf-8')
 
-    def check_password(self, password):
+    # Password verification
+    def check_password(self, password): 
         return check_password_hash(self.password_hash, password)
+
     
 class UserSchema(ma.Schema):
     # Define how to serialize/deserialize user objects

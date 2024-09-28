@@ -13,7 +13,8 @@ class Condition(db.Model):
     def __repr__(self):
         return f"<Condition name={self.condition_name}>"
 
-class ConditionSchema(ma.Schema):
+
+lass ConditionSchema(ma.Schema):
     id = fields.Int()
     condition_name = fields.Str()
     

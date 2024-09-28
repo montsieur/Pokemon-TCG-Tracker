@@ -10,9 +10,9 @@ class UserCard(db.Model):
     condition_id = db.Column(db.Integer, db.ForeignKey('conditions.id'), nullable=False)
 
     # Relationships
-    user = db.relationship("User", back_populates="user_cards") # Link back to the User model
-    card = db.relationship("Card", back_populates="user_cards")  # Link to the Card model
-    condition = db.relationship("Condition", back_populates="user_cards")  # Link to the Condition model
+    user = db.relationship("User", back_populates="user_cards")
+    card = db.relationship("Card", back_populates="user_cards")  
+    condition = db.relationship("Condition", back_populates="user_cards")  
 
     def __repr__(self):
         return f"<UserCard user_id={self.user_id}, card_id={self.card_id}, condition_id={self.condition_id}>"

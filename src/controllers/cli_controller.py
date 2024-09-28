@@ -202,10 +202,10 @@ def seed_db():
 @click.argument("release_date")
 def add_set(name, release_date):
     try:
-        release_date_obj = date.fromisoformat(release_date)
+        release_date_obj = date.fromisoformat(release_date) # Convert ISO date string to date object
 
-        new_set = Set(set_name=name, release_date=release_date_obj)
-        db.session.add(new_set)
+        new_set = Set(set_name=name, release_date=release_date_obj) # Convert date object to datetime object
+        db.session.add(new_set) #
         db.session.commit()
 
         print(f"Set '{name}' added successfully with release date {release_date}.")

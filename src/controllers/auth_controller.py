@@ -8,6 +8,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_tok
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
+# Register a new user
 @auth_blueprint.route('/register', methods=['POST'])
 def register():
     try:
@@ -37,6 +38,7 @@ def register():
             return {"error": "Email or username already registered."}, 409
         return {"error": "An unexpected integrity error occurred."}, 500
 
+# Login a user
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
     try:
