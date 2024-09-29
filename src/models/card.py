@@ -28,7 +28,9 @@ class CardSchema(ma.Schema):
     set = fields.Nested('SetSchema', only=("set_name", "release_date"))
 
     class Meta:
-        fields = ("id", "name", "card_type", "rarity", "set")
+        fields = (
+            "id", "name", "card_type", "rarity", "set"
+        )
 
 # To handle a single Card object
 card_schema = CardSchema()

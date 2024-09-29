@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.wishlist import Wishlist, WishlistSchema
+from models.user import User
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from utils import auth_as_admin_decorator
 

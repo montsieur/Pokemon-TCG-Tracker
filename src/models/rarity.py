@@ -18,7 +18,9 @@ class RaritySchema(ma.Schema):
     rarity_name = fields.Str()
 
     class Meta:
-        fields = ("id", "rarity_name")
+        fields = (
+            "id", "rarity_name"
+        )
 
 # To handle a single Rarity object
 rarity_schema = RaritySchema()

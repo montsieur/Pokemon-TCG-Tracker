@@ -14,12 +14,14 @@ class Condition(db.Model):
         return f"<Condition name={self.condition_name}>"
 
 
-lass ConditionSchema(ma.Schema):
+class ConditionSchema(ma.Schema):
     id = fields.Int()
     condition_name = fields.Str()
     
     class Meta:
-        fields = ("id", "condition_name")
+        fields = (
+            "id", "condition_name"
+        )
 
 # To handle a single Condition object
 condition_schema = ConditionSchema()

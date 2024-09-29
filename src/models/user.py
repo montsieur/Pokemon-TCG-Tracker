@@ -49,7 +49,9 @@ class UserSchema(ma.Schema):
             raise ValidationError("Username must be at least 2 characters long.")
 
     class Meta:
-        fields = ("id", "username", "email", "is_admin", "user_cards", "trades_offered", "trades_received", "wishlists")
+        fields = (
+            "id", "username", "email", "is_admin", "user_cards", "trades_offered", "trades_received", "wishlists"
+        )
 
 # To handle a single user object
 user_schema = UserSchema()

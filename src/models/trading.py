@@ -26,15 +26,22 @@ class Trade(db.Model):
         return f'<Trade id={self.id}>'
 
 class TradingSchema(ma.Schema):
+    id = fields.Int()
+    offering_quantity = fields.Int()
+    receiving_quantity = fields.Int()
+    status = fields.Nested('StatusSchema', only=("id", "status_name"))
+    
+    # Nested relationships to get more details for offering and receiving users/cards
     offering_user = fields.Nested('UserSchema', only=("id", "username"))
     receiving_user = fields.Nested('UserSchema', only=("id", "username"))
     offering_card = fields.Nested('CardSchema', only=("id", "name", "card_type"))
     receiving_card = fields.Nested('CardSchema', only=("id", "name", "card_type"))
-    status = fields.Nested('StatusSchema', only=("id", "status_name"))
 
     class Meta:
-        fields = ("id", "offering_user", "receiving_user", "offering_card", 
-                  "receiving_card", "offering_quantity", "receiving_quantity", "status")
+        fields = (
+            "id", "offering_user", "receiving_user", "offering_card", 
+            "receiving_card", "offering_quantity", "receiving_quantity", "status"
+        )
 
 # To handle a single Trade object
 trade_schema = TradingSchema()

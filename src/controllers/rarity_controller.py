@@ -38,7 +38,9 @@ def add_rarity():
 @jwt_required()
 @auth_as_admin_decorator
 def delete_rarity(id):
-    rarity = Rarity.query.get_or_404(id)
+    rarity = Rarity.query.get(id)
+    if not rarity:
+        return {"error": f"Rarity with ID {id} does not exist"}, 404
     db.session.delete(rarity)
     db.session.commit()
     return {"message": "Rarity deleted successfully"}, 200

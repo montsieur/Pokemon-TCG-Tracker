@@ -43,7 +43,9 @@ def add_card():
 @jwt_required()
 @auth_as_admin_decorator
 def update_card(card_id):
-    card = Card.query.get_or_404(card_id)
+    card = Card.query.get(card_id)
+    if not card:
+        return {"error": f"Card with ID {card_id} does not exist"}, 404
     data = request.get_json()
 
     # Update card fields if provided
@@ -64,7 +66,9 @@ def update_card(card_id):
 @jwt_required()
 @auth_as_admin_decorator
 def delete_card(card_id):
-    card = Card.query.get_or_404(card_id)
+    card = Card.query.get(card_id)
+    if not card:
+        return {"error": f"Card with ID {card_id} does not exist"}, 404
     db.session.delete(card)
     db.session.commit()
     return {"message": "Card deleted successfully"}, 200

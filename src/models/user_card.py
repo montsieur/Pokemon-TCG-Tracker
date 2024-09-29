@@ -23,7 +23,9 @@ class UserCardSchema(ma.Schema):
     condition = fields.Nested('ConditionSchema', only=("id", "condition_name"))
 
     class Meta:
-        fields = ('id', 'user_id', 'card_id', 'condition_id', 'user', 'card')
+        fields = (
+            'id', 'user_id', 'card_id', 'condition_id', 'user', 'card'
+        )
 
 # To handle a single UserCard object
 user_card_schema = UserCardSchema()

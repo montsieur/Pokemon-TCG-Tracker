@@ -15,10 +15,9 @@ def get_user_cards():
     user_card_schema = UserCardSchema(many=True)
     return user_card_schema.dump(user_cards), 200
 
-# Get all cards owned by a specific user (Admin access required)
+# Get all cards owned by a specific user
 @user_card_blueprint.route('/<int:user_id>', methods=['GET'])
 @jwt_required()
-@auth_as_admin_decorator
 def get_specific_user_cards(user_id):
     user_cards = UserCard.query.filter_by(user_id=user_id).all()
     user_card_schema = UserCardSchema(many=True)

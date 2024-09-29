@@ -18,7 +18,9 @@ class StatusSchema(ma.Schema):
     status_name = fields.Str()
 
     class Meta:
-        fields = ("id", "status_name")
+        fields = (
+            "id", "status_name"
+        )
 
 # To handle a single Status object
 status_schema = StatusSchema()

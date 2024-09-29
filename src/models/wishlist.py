@@ -21,7 +21,9 @@ class WishlistSchema(ma.Schema):
     card = fields.Nested('CardSchema', only=("id", "name", "card_type"))
 
     class Meta:
-        fields = ("id", "user_id", "card_id", "user", "card")
+        fields = (
+            "id", "user_id", "card_id", "user", "card"
+        )
 
 # To handle a single Wishlist object
 wishlist_schema = WishlistSchema()
